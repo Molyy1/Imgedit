@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AI Image Editor</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
     :root {
       --primary-color: #4361ee;
@@ -27,8 +27,6 @@
       background-color: #f5f7ff;
       color: var(--dark-color);
       line-height: 1.6;
-      padding: 0;
-      margin: 0;
       min-height: 100vh;
     }
 
@@ -51,6 +49,7 @@
       background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
       -webkit-background-clip: text;
       background-clip: text;
+      color: transparent;
     }
 
     .subtitle {
@@ -131,6 +130,7 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
       padding: 2rem;
       margin-top: 2rem;
+      text-align: center;
     }
 
     .result-title {
@@ -205,6 +205,15 @@
       border-radius: 0 4px 4px 0;
     }
 
+    .download-btn {
+      margin-top: 1rem;
+      background-color: var(--success-color);
+    }
+
+    .download-btn:hover {
+      background-color: #3ca234;
+    }
+
     footer {
       text-align: center;
       margin-top: 3rem;
@@ -233,12 +242,12 @@
     <div class="editor-container">
       <div class="input-group">
         <label for="imageUrlInput">Image URL</label>
-        <input type="text" id="imageUrlInput" placeholder="Paste the URL of the image you want to edit...">
+        <input type="text" id="imageUrlInput" placeholder="Paste the URL of the image you want to edit..."/>
       </div>
 
       <div class="input-group">
         <label for="promptInput">Edit Instructions</label>
-        <textarea id="promptInput" placeholder="Describe how you want to edit the image (e.g., 'Make it look like a painting', 'Change background to beach', 'Add a hat to the person')"></textarea>
+        <textarea id="promptInput" placeholder="Describe how you want to edit the image..."></textarea>
       </div>
 
       <button class="btn" onclick="editImage()">Edit Image</button>
@@ -265,6 +274,7 @@
     <div class="result-container" id="resultContainer">
       <h2 class="result-title">Your Edited Image</h2>
       <div class="image-container" id="imageContainer"></div>
+      <a id="downloadBtn" class="btn download-btn" style="display:none" download="edited-image.jpg">Download Image</a>
     </div>
   </div>
 
@@ -280,51 +290,38 @@
       const loadingIndicator = document.getElementById('loadingIndicator');
       const errorMessage = document.getElementById('errorMessage');
       const imageContainer = document.getElementById('imageContainer');
+      const downloadBtn = document.getElementById('downloadBtn');
 
-      // Reset UI
       resultContainer.style.display = 'none';
       errorMessage.style.display = 'none';
       loadingIndicator.style.display = 'block';
+      downloadBtn.style.display = 'none';
 
-      // Validate inputs
-      if (!imageUrl) {
-        showError('Please paste an image URL.');
-        return;
-      }
-
-      if (!prompt) {
-        showError('Please enter editing instructions.');
-        return;
-      }
+      if (!imageUrl) return showError('Please paste an image URL.');
+      if (!prompt) return showError('Please enter editing instructions.');
 
       try {
-        // Check if the URL is valid
         new URL(imageUrl);
-
         const editUrl = `https://tawsifz-gemini.onrender.com/edit?texts=${encodeURIComponent(prompt)}&url=${encodeURIComponent(imageUrl)}`;
 
-        // Create image element
         const finalImage = new Image();
         finalImage.className = 'image-preview';
         finalImage.alt = 'Edited image based on your prompt';
 
-        // Handle successful load
         finalImage.onload = () => {
           loadingIndicator.style.display = 'none';
           imageContainer.innerHTML = '';
           imageContainer.appendChild(finalImage);
           resultContainer.style.display = 'block';
-
-          // Smooth scroll to result
+          downloadBtn.href = finalImage.src;
+          downloadBtn.style.display = 'inline-block';
           resultContainer.scrollIntoView({ behavior: 'smooth' });
         };
 
-        // Handle error loading image
         finalImage.onerror = () => {
           showError('Failed to process the image. Please check the URL and try again.');
         };
 
-        // Start loading the image
         finalImage.src = editUrl;
 
       } catch (error) {
@@ -336,7 +333,6 @@
     function showError(message) {
       const loadingIndicator = document.getElementById('loadingIndicator');
       const errorMessage = document.getElementById('errorMessage');
-
       loadingIndicator.style.display = 'none';
       errorMessage.textContent = message;
       errorMessage.style.display = 'block';
