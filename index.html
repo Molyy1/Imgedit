@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Image Editor</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary-color: #4361ee;
@@ -15,32 +15,34 @@
       --success-color: #4bb543;
       --error-color: #ff3333;
     }
-
+    
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-
+    
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #f5f7ff;
       color: var(--dark-color);
       line-height: 1.6;
+      padding: 0;
+      margin: 0;
       min-height: 100vh;
     }
-
+    
     .container {
       max-width: 900px;
       margin: 0 auto;
       padding: 2rem;
     }
-
+    
     header {
       text-align: center;
       margin-bottom: 2.5rem;
     }
-
+    
     h1 {
       font-size: 2.5rem;
       font-weight: 600;
@@ -49,15 +51,14 @@
       background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
       -webkit-background-clip: text;
       background-clip: text;
-      color: transparent;
     }
-
+    
     .subtitle {
       color: #666;
       font-weight: 300;
       font-size: 1.1rem;
     }
-
+    
     .editor-container {
       background-color: white;
       border-radius: 12px;
@@ -65,18 +66,18 @@
       padding: 2rem;
       margin-bottom: 2rem;
     }
-
+    
     .input-group {
       margin-bottom: 1.5rem;
     }
-
+    
     label {
       display: block;
       margin-bottom: 0.5rem;
       font-weight: 500;
       color: var(--dark-color);
     }
-
+    
     input, textarea {
       width: 100%;
       padding: 12px 15px;
@@ -86,18 +87,18 @@
       font-family: inherit;
       transition: all 0.3s ease;
     }
-
+    
     input:focus, textarea:focus {
       outline: none;
       border-color: var(--primary-color);
       box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
     }
-
+    
     textarea {
       min-height: 100px;
       resize: vertical;
     }
-
+    
     .btn {
       background-color: var(--primary-color);
       color: white;
@@ -112,17 +113,17 @@
       text-align: center;
       width: 100%;
     }
-
+    
     .btn:hover {
       background-color: var(--secondary-color);
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
     }
-
+    
     .btn:active {
       transform: translateY(0);
     }
-
+    
     .result-container {
       display: none;
       background-color: white;
@@ -130,34 +131,33 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
       padding: 2rem;
       margin-top: 2rem;
-      text-align: center;
     }
-
+    
     .result-title {
       font-size: 1.5rem;
       color: var(--primary-color);
       margin-bottom: 1rem;
       text-align: center;
     }
-
+    
     .image-container {
       margin-top: 1.5rem;
       text-align: center;
     }
-
+    
     .image-preview {
       max-width: 100%;
       border-radius: 8px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
       margin-bottom: 1rem;
     }
-
+    
     .loading {
       display: none;
       text-align: center;
       margin: 2rem 0;
     }
-
+    
     .spinner {
       width: 50px;
       height: 50px;
@@ -167,11 +167,11 @@
       animation: spin 1s ease-in-out infinite;
       margin: 0 auto 1rem;
     }
-
+    
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-
+    
     .error-message {
       color: var(--error-color);
       background-color: rgba(255, 51, 51, 0.1);
@@ -180,23 +180,23 @@
       margin: 1rem 0;
       display: none;
     }
-
+    
     .example-prompts {
       margin-top: 2rem;
       background-color: rgba(67, 97, 238, 0.05);
       padding: 1.5rem;
       border-radius: 8px;
     }
-
+    
     .example-prompts h3 {
       color: var(--primary-color);
       margin-bottom: 1rem;
     }
-
+    
     .prompt-list {
       list-style-type: none;
     }
-
+    
     .prompt-list li {
       margin-bottom: 0.5rem;
       padding: 0.5rem;
@@ -204,28 +204,19 @@
       background-color: white;
       border-radius: 0 4px 4px 0;
     }
-
-    .download-btn {
-      margin-top: 1rem;
-      background-color: var(--success-color);
-    }
-
-    .download-btn:hover {
-      background-color: #3ca234;
-    }
-
+    
     footer {
       text-align: center;
       margin-top: 3rem;
       color: #666;
       font-size: 0.9rem;
     }
-
+    
     @media (max-width: 768px) {
       .container {
         padding: 1rem;
       }
-
+      
       h1 {
         font-size: 2rem;
       }
@@ -238,28 +229,28 @@
       <h1>AI Image Editor</h1>
       <p class="subtitle">Transform any image with AI using simple text prompts</p>
     </header>
-
+    
     <div class="editor-container">
       <div class="input-group">
         <label for="imageUrlInput">Image URL</label>
-        <input type="text" id="imageUrlInput" placeholder="Paste the URL of the image you want to edit..."/>
+        <input type="text" id="imageUrlInput" placeholder="Paste the URL of the image you want to edit...">
       </div>
-
+      
       <div class="input-group">
         <label for="promptInput">Edit Instructions</label>
-        <textarea id="promptInput" placeholder="Describe how you want to edit the image..."></textarea>
+        <textarea id="promptInput" placeholder="Describe how you want to edit the image (e.g., 'Make it look like a painting', 'Change background to beach', 'Add a hat to the person')"></textarea>
       </div>
-
+      
       <button class="btn" onclick="editImage()">Edit Image</button>
-
+      
       <div class="loading" id="loadingIndicator">
         <div class="spinner"></div>
         <p>Processing your image. This may take a moment...</p>
       </div>
-
+      
       <div class="error-message" id="errorMessage"></div>
     </div>
-
+    
     <div class="example-prompts">
       <h3>Example Prompts</h3>
       <ul class="prompt-list">
@@ -270,18 +261,17 @@
         <li>"Make the colors more vibrant and contrasty"</li>
       </ul>
     </div>
-
+    
     <div class="result-container" id="resultContainer">
       <h2 class="result-title">Your Edited Image</h2>
       <div class="image-container" id="imageContainer"></div>
-      <a id="downloadBtn" class="btn download-btn" style="display:none" download="edited-image.jpg">Download Image</a>
     </div>
   </div>
-
+  
   <footer>
     <p>AI Image Editor &copy; 2023 | Powered by AI technology</p>
   </footer>
-
+  
   <script>
     async function editImage() {
       const imageUrl = document.getElementById('imageUrlInput').value.trim();
@@ -290,49 +280,63 @@
       const loadingIndicator = document.getElementById('loadingIndicator');
       const errorMessage = document.getElementById('errorMessage');
       const imageContainer = document.getElementById('imageContainer');
-      const downloadBtn = document.getElementById('downloadBtn');
-
+      
+      // Reset UI
       resultContainer.style.display = 'none';
       errorMessage.style.display = 'none';
       loadingIndicator.style.display = 'block';
-      downloadBtn.style.display = 'none';
-
-      if (!imageUrl) return showError('Please paste an image URL.');
-      if (!prompt) return showError('Please enter editing instructions.');
-
+      
+      // Validate inputs
+      if (!imageUrl) {
+        showError('Please paste an image URL.');
+        return;
+      }
+      
+      if (!prompt) {
+        showError('Please enter editing instructions.');
+        return;
+      }
+      
       try {
+        // Check if the URL is valid
         new URL(imageUrl);
+        
         const editUrl = `https://tawsifz-gemini.onrender.com/edit?texts=${encodeURIComponent(prompt)}&url=${encodeURIComponent(imageUrl)}`;
-
+        
+        // Create image element
         const finalImage = new Image();
         finalImage.className = 'image-preview';
         finalImage.alt = 'Edited image based on your prompt';
-
+        
+        // Handle successful load
         finalImage.onload = () => {
           loadingIndicator.style.display = 'none';
           imageContainer.innerHTML = '';
           imageContainer.appendChild(finalImage);
           resultContainer.style.display = 'block';
-          downloadBtn.href = finalImage.src;
-          downloadBtn.style.display = 'inline-block';
+          
+          // Smooth scroll to result
           resultContainer.scrollIntoView({ behavior: 'smooth' });
         };
-
+        
+        // Handle error loading image
         finalImage.onerror = () => {
           showError('Failed to process the image. Please check the URL and try again.');
         };
-
+        
+        // Start loading the image
         finalImage.src = editUrl;
-
+        
       } catch (error) {
         console.error(error);
         showError('Invalid image URL. Please enter a valid URL starting with http:// or https://');
       }
     }
-
+    
     function showError(message) {
       const loadingIndicator = document.getElementById('loadingIndicator');
       const errorMessage = document.getElementById('errorMessage');
+      
       loadingIndicator.style.display = 'none';
       errorMessage.textContent = message;
       errorMessage.style.display = 'block';
